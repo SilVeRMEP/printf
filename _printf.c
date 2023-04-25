@@ -3,42 +3,61 @@
 #include <stdio.h>
 
 /**
+ * formats - handles format specifiers for ft_printf
+ * @ptr: pointer to the list of arguments
+ * @f: format specifier character
+ *
+ * Return: number of characters printed
+ */
+int	formats(va_list ptr, char f)
+{
+	int	len;
+
+	len = 0;
+	if (f == 'c')
+		len += ft_putchar_fd(va_arg(ptr, int), 1);
+	else if (f == 's')
+		len += ft_putstr_fd(va_arg(ptr, char *), 1);
+	else if (f == 'p')
+		len += print_ptr(va_arg(ptr, void *));
+	else if (f == 'd' || f == 'i')
+		len += ft_putnbr(va_arg(ptr, int));
+	else if (f == 'u')
+		len += ft_putunbr(va_arg(ptr, int));
+	else if (f == 'x')
+		len += printhex(va_arg(ptr, unsigned int), 0);
+	else if (f == 'X')
+		len += printhex(va_arg(ptr, unsigned int), 1);
+	else if (f == '%')
+		len += write(1, "%", 1);
+	return (len);
+}
+
+/**
  * _printf - produces output according to a format
  * @format: format string containing the characters and the specifiers
  * Return: length of the formatted 
  */
-int _printf(const char *format, ...)
+int	_printf(const char *str, ...)
 {
-int (*pfunc)(va_list, flags_t *);
-const char *p;
-va_list arguments;
-flags_t flags = {0, 0, 0};
-register int count = 0;
-va_start(arguments, format);
-if (!format || (format[0] == '%' && !format[1]))
-return (-1);
-if (format[0] == '%' && format[1] == ' ' && !format[2])
-return (-1);
-for (p = format; *p; p++)
-{
-if (*p == '%')
-{
-p++;
-if (*p == '%')
-{
-count += _putchar('%');
-continue;
-}
-while (get_flag(*p, &flags))
-p++;
-pfunc = get_print(*p);
-count += (pfunc)
-? pfunc(arguments, &flags)
-: _printf("%%%c", *p);
-} else
-count += _putchar(*p);
-}
-_putchar(-1);
-va_end(arguments);
-return (count);
+	int		i;
+	va_list	ptr;
+	int		len;
+
+	i = 0;
+	len = 0;
+	va_start(ptr, str);
+	while (str[i])
+	{
+		if (str[i] == '%')
+		{
+			len += formats(ptr, str[i + 1]);
+			i++;
+		}
+		else
+			len += write(1, str + i, 1);
+		i++;
+	}
+	va_end(ptr);
+	return (len);
 }
