@@ -32,7 +32,6 @@ int	formats(va_list ptr, char f)
 		len += write(1, "%", 1);
 	return (len);
 }
-
 /**
  * _printf - produces output according to a format
  * @str: format string containing the characters and the specifiers
