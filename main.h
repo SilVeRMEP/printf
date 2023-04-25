@@ -1,7 +1,8 @@
 #ifndef MAIN_H
 #define MAIN_H
-#include <stdlib.h>
-#include <stdarg.h>
+# include <stdarg.h>
+# include <unistd.h>
+# include <stdio.h>
 typedef struct flags
 {
 	int plus;
@@ -34,4 +35,6 @@ int print_rev(va_list l, flags_t *f);
 int print_bigS(va_list l, flags_t *f);
 int print_address(va_list l, flags_t *f);
 int print_percent(va_list l, flags_t *f);
+int	formats(va_list ptr, char f);
+
 #endif
