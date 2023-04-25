@@ -25,7 +25,6 @@ int _printf(const char *format, ...)
             }
             else if (*format == 's')
             {
-                // Print a string
                 char *s = va_arg(arg_list, char*);
                 while (*s != '\0')
                 {
